@@ -58,16 +58,14 @@ namespace PasswordValut
                     passwords.WriteLine(PasswordBox.Text);
                     users.Close();
                     passwords.Close();
+                    var parentWindow = this.Parent as Window;
 
-                    Vault v = new Vault(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + EmailBox.Text + "PasswordList.txt", EmailBox.Text);
-                    if (v != null)
+                    if (parentWindow != null)
                     {
-                        this.RemoveLogicalChild(v);
-                        Content = v.Content;
+                        parentWindow.Close();
                     }
-                    else {
-                        Console.WriteLine(v + "vault info ");
-                    }
+                    MainWindow Main = new MainWindow();
+                    Main.ShowDialog();
                 }
                 else {
                     Wrong.Visibility = Visibility.Visible;
@@ -86,9 +84,13 @@ namespace PasswordValut
         {
             if (e.Key == Key.Enter)
             {
-                Console.WriteLine("ENterPressed");
                 Register_Click(sender, e);
             }
+        }
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

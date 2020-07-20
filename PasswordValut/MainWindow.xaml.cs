@@ -23,60 +23,45 @@ namespace PasswordValut
         public MainWindow()
         {
             InitializeComponent();
-            VerificationComponent v = new VerificationComponent();
-            Console.WriteLine(v.Verification("142862z"));
-
+            Console.WriteLine("Where in");
+            /*
+            if (!File.Exists(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + email + "PasswordList.txt"))
+            {
+                FileStream fs = File.Create(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + email + "PasswordList.txt");
+                path = @"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + email + "PasswordList.txt";
+                fs.Close();
+            }
+            Console.WriteLine("In Valut");
+            UsersFile = path;
+                        InitializeComponent();
+            System.IO.StreamReader items =
+           new System.IO.StreamReader(UsersFile);
+            string line = "";
+            while ((line = items.ReadLine()) != null)
+            {
+                Viewer.Items.Add(line);
+                Console.WriteLine(line);
+            }
+            items.Close();
+            */
         }
 
-        private void Signin_Click(object sender, RoutedEventArgs e)
+        private void Control_Click(object sender, RoutedEventArgs e)
         {
-
-            string line;
-            List<string> Users = new List<string>();
-            List<string> Passwords = new List<string>();
-            System.IO.StreamReader users =
-       new System.IO.StreamReader(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\UserList.txt");
-            System.IO.StreamReader passwords =
-    new System.IO.StreamReader(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\PasswordList.txt");
-
-            while ((line = users.ReadLine()) != null)
+            if (Bar.Text != String.Empty && Bar.Text.Contains(" ")) // && verified with a space and good password
             {
-                Users.Add(line);
-                Console.WriteLine(line);
-            }
-            while ((line = passwords.ReadLine()) != null)
-            {
-                Passwords.Add(line);
-                Console.WriteLine(line);
-            }
-
-            if (Users.Contains(EmailBox.Text) && Passwords[Users.IndexOf(EmailBox.Text)] == PasswordBox.Password)
-            {
-                users.Close();
-                passwords.Close();
-                Vault PasswordsView = new Vault(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + EmailBox.Text + "PasswordList.txt",EmailBox.Text);
-                Content = PasswordsView;
-
+                Viewer.Items.Add(Bar.Text);
+                //System.IO.StreamWriter items = new System.IO.StreamWriter(UsersFile, true);
+                //items.WriteLine(Bar.Text);
+                //items.Close();
+                Bar.Clear();
             }
             else
             {
-                WrongLable.Content = "Wrong info";
-                Wrong.Visibility = Visibility.Visible;
-            }
-
-        }
-
-        private void Register_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Register Register = new Register();
-            Content = Register.Content;
-        }
-
-        private void Grid_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) {
-                Signin_Click(sender, e);
+                Console.WriteLine("Syntax error");
             }
         }
     }
+
+
 }

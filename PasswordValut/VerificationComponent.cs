@@ -80,7 +80,7 @@ namespace PasswordValut
                 temp += x;
             }
 
-            return pass + temp;
+            return pass +  temp;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace PasswordValut
             string Message = "Password";
             string password = pass;
             List<char> tempstr = new List<char>(); //all unique charictars
-            List<string> tempidchain = new List<string>();
+            List<string> idchain = new List<string>();
             
             foreach (char x in pass) {
                 if (!tempstr.Contains(x)) {
@@ -105,29 +105,31 @@ namespace PasswordValut
                 Message += " does not have enough unique charictars ";
             }
             if (!pass.Intersect(U.special).Any()) {
-                tempidchain.Add("spe");
+                idchain.Add("spe");
                 Message += "\n Needs at least one special charictar ";
             }
             if (!pass.Intersect(U.alpha).Any())
             {
-                tempidchain.Add("cap");
+                idchain.Add("cap");
                 Message += "\n Needs at least one capitalized letter ";
             }
             if (!pass.Intersect(U.numbers).Any())
             {
-                tempidchain.Add("alp");
+                idchain.Add("alp");
                 Message += "\n Needs at least one number ";
             }
             if (pass.Length < 10) {
-                tempidchain.Add((10 - pass.Length).ToString());
+                idchain.Add((10 - pass.Length).ToString());
                 Message += "\n Length must be at least 10 charictars long ";
             }
-            if (tempidchain.Count >= 1) {
-                Message += "\n recommend this password : " + Recommendation(tempidchain, password); 
+            if (idchain.Count >= 1)
+            {
+                Message += "\n recommend this password : " + Recommendation(idchain, password);
             }
-            if (Message == "Password") {
-                return "Valid Password";
+            else {
+                return "Valid";
             }
+
             return Message;
         }
 
