@@ -1,0 +1,24 @@
+﻿<Page x:Class="PasswordValut.Vault"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PasswordValut"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="600"
+      Title="Vault">
+
+    <Grid>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,372">
+            <TextBox Name="Bar" Width="242" Margin="0,0,0,10"/>
+            <Button Name="Control" Width="57" Content="Add" Click="Control_Click" Margin="0,0,0,10" />
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,57,0,0" >
+            <ListView x:Name="Viewer" BorderThickness="2"  BorderBrush="Black" >
+
+            </ListView>
+        </ScrollViewer>
+        
+    </Grid>
+</Page>
