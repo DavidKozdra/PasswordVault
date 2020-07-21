@@ -57,17 +57,23 @@ namespace PasswordValut
             }
             else
             {
+                LoginPasswordBox.Password = string.Empty;
                 LoginWrongLable.Content = "Wrong info";
                 LoginWrong.Visibility = Visibility.Visible;
             }
 
         }
 
-        private void Grid_KeyDown(object sender, KeyEventArgs e)
+        private void Enter_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                Signin_Click(sender, e);
+                Console.WriteLine("Pressed");
+                if (Signin.Visibility== Visibility.Visible) {
+                    Signin_Click(sender, e);
+                } else { 
+                    Register_Click(sender,e);
+                }
             }
         }
 
@@ -99,8 +105,8 @@ namespace PasswordValut
                     System.IO.StreamWriter passwords =
                             new System.IO.StreamWriter(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\PasswordList.txt", true);
 
-                    users.WriteLine(EmailBox.Text);
-                    passwords.WriteLine(PasswordBox.Text);
+                    users.Write(EmailBox.Text + "\n");
+                    passwords.Write(PasswordBox.Text + "\n");
                     users.Close();
                     passwords.Close();
                     System.Threading.Thread.Sleep(1000);

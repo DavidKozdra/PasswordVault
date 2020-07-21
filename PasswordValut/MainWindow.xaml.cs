@@ -24,6 +24,9 @@ namespace PasswordValut
         {
             InitializeComponent();
             Console.WriteLine("Where in");
+            GenerationComponent GC = new GenerationComponent();
+            Utilitys U = new Utilitys();
+            PasswordGen.Text = GC.GeneratedPassword(U.RNG(10, 13));
             /*
             if (!File.Exists(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + email + "PasswordList.txt"))
             {
@@ -60,6 +63,20 @@ namespace PasswordValut
             {
                 Console.WriteLine("Syntax error");
             }
+        }
+
+        private void Gen_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            GenerationComponent GC = new GenerationComponent();
+            Utilitys U = new Utilitys();
+            PasswordGen.Text = GC.GeneratedPassword(U.RNG(10,13));
+            Console.WriteLine(PasswordGen.Text);
+
+        }
+
+        private void use_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
