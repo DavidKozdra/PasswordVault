@@ -136,13 +136,26 @@ namespace PasswordValut
                 idchain.Add((10 - pass.Length).ToString());
                 Message += "\n Length must be at least 10 charictars long ";
             }
+            int Mod = 0;
+            if (idchain.Count > 0)
+            {
+                Mod = idchain.Count;
+            }
+            else
+            {
+                Mod = -5;
+            }
+            float PasswordStrength = (tempstr.Count - Mod) /2;
             if (idchain.Count >= 1)
             {
                 Message += "\n recommend this password : " + Recommendation(idchain, password);
+
             }
-            else {
-                return "Valid";
+            else
+            {
+                return "Valid " + "\n Password strength = " + PasswordStrength + "%";
             }
+          
 
             return Message;
         }
