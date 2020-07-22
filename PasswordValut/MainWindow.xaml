@@ -13,50 +13,52 @@
             <Setter Property="FontSize" Value="18"/>
             <!--Foreground="AntiqueWhite" FontSize="18"-->
         </Style>
-        
-        
+
+
     </Window.Resources>
     <Grid Margin="10" >
 
-        <TabControl VerticalAlignment="Top" Height="337" >
+        <TabControl VerticalAlignment="Top" Height="337" x:Name="Controller" KeyDown="Controller_KeyDown" >
             <TabItem Header="Passwords">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBox Name="Bar" Width="394" Margin="0,0,100,258"/>
-
-                        <Button x:Name="Control" Width="81" Content="New" Click="Control_Click" Margin="0,0,0,253" />
+                    <StackPanel Orientation="Horizontal" Margin="4">
+                        <TextBox Name="Bar" Width="386" Margin="0,10,50,258" FontSize="18"/>
+                        <Button x:Name="Control" Width="112" Content="New" Click="Add_Click" Margin="0,10,0,258" />
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,57,0,0" >
                         <ListView x:Name="Viewer" BorderThickness="2"  BorderBrush="Black" >
 
                         </ListView>
                     </ScrollViewer>
-                </Grid>                
+                </Grid>
             </TabItem>
-            <TabItem Header="Run down">
+            <TabItem Header="Password Health Report">
                 <StackPanel>
-                    <TextBlock Text="Work on this">
+                    <ScrollViewer>
+                        <TextBlock x:Name="Report" Text="Click to get report"  MouseDown="Report_MouseDown" >
                         </TextBlock>
+                    </ScrollViewer>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Generate Password">
                 <StackPanel>
                     <Label FontSize="40" Foreground="DarkBlue">
                         Newly generated Password :
-                        </Label>
-                            <TextBlock Text="XXX" x:Name="PasswordGen" FontSize="30" Margin="20" Foreground="Black">
+                    </Label>
+                    <TextBlock Text="XXX" x:Name="PasswordGen" FontSize="30" Margin="20" Foreground="Black">
                     </TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="Signin" Click="Gen_MouseDown" Margin="40" Width="118" Content="Refresh"  Background="#545d5a" Foreground="White" FontSize="18"/>
+                        <Button x:Name="Refresh" Click="Refresh_Click" Margin="40" Width="118" Content="Refresh"  Background="#545d5a" Foreground="White" FontSize="18"/>
                         <Button x:Name="use" Click="use_Click" Margin="40" Width="118" Content="Use"  Background="#545d5a" Foreground="White" FontSize="18"/>
 
                     </StackPanel>
                 </StackPanel>
-               
+
             </TabItem>
             <TabItem Header="User">
                 <StackPanel>
-                    <TextBlock x:Name="Userinformation" Text="" Height="318">
+                    <Label x:Name="NameLable" Content="" FontSize="25"/>
+                        <TextBlock x:Name="Userinformation" Text="" Height="318">
                     </TextBlock>
                 </StackPanel>
             </TabItem>

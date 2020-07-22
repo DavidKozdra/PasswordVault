@@ -19,10 +19,21 @@ namespace PasswordValut
     /// </summary>
     public partial class LoginSystem : Window
     {
-
+        int wrongattemps = 0;
         public LoginSystem()
         {
             InitializeComponent();
+        }
+
+        private List<string> FileToList( System.IO.StreamReader F) {
+            List<string> S = new List<string>();
+            string temp = "";
+            while ((temp = F.ReadLine()) != null)
+            {
+                S.Add(temp);
+                Console.WriteLine(temp);
+            }
+            return S;
         }
 
         private void Signin_Click(object sender, RoutedEventArgs e)
@@ -48,31 +59,74 @@ namespace PasswordValut
             Console.WriteLine(Users.IndexOf(EmailBox.Text));
             if (Users.Contains(LoginEmailBox.Text) && Passwords[Users.IndexOf(LoginEmailBox.Text)] == LoginPasswordBox.Password)
             {
-                users.Close();
-                passwords.Close();
-                Console.WriteLine("Correct");
-                MainWindow Main = new MainWindow();
-                Main.Show();
-                this.Close();
+                if (wrongattemps < 4)
+                {
+                    users.Close();
+                    passwords.Close();
+                    Console.WriteLine("Correct");
+                    MainWindow Main = new MainWindow();
+                    Main.Show();
+                    this.Close();
+                }
+                else
+                {
+                    UseWrongLable("Too many failed attempts reset app to continue");
+                    //add timer
+                }
             }
             else
             {
+                wrongattemps++;
                 LoginPasswordBox.Password = string.Empty;
-                LoginWrongLable.Content = "Wrong info";
-                LoginWrong.Visibility = Visibility.Visible;
+                UseWrongLable("Wrong info " + wrongattemps.ToString());
             }
 
         }
+
+        private Grid Current()
+        {
+            if (Login.Visibility == Visibility.Visible)
+            {
+                return Login;
+            }
+            else
+            {
+                return Register;
+            }
+
+        }
+
+
+        private void UseWrongLable(string message)
+        {
+            if (Login.Visibility == Visibility.Visible)
+            {
+                Console.WriteLine("Login " + message);
+                LoginWrong.Visibility = Visibility.Visible;
+                LoginWrongLable.Content = message;
+                Console.WriteLine(LoginWrongLable.Content);
+            }
+            else if(Register.Visibility == Visibility.Visible)
+            {
+
+                Wrong.Visibility = Visibility.Visible;
+                WrongLable.Content = message;
+            }
+        }
+
 
         private void Enter_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                Console.WriteLine("Pressed");
-                if (Signin.Visibility== Visibility.Visible) {
+                if (Login.Visibility == Visibility.Visible)
+                {
                     Signin_Click(sender, e);
-                } else { 
-                    Register_Click(sender,e);
+
+                }
+                else
+                {
+                    Register_Click(sender, e);
                 }
             }
         }
@@ -94,7 +148,7 @@ namespace PasswordValut
                 List<string> Users = new List<string>();
                 while ((line = users2.ReadLine()) != null)
                 {
-                    Users.Add(line);
+                    Users.Add("items :" + line);
                     Console.WriteLine(line);
                 }
                 users2.Close();
@@ -109,37 +163,51 @@ namespace PasswordValut
                     passwords.Write(PasswordBox.Text + "\n");
                     users.Close();
                     passwords.Close();
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(2000);
                     MainWindow Main = new MainWindow();
                     Main.Show();
                     this.Close();
                 }
                 else
                 {
-                    Wrong.Visibility = Visibility.Visible;
-                    WrongLable.FontSize = 10;
-                    WrongLable.Content = "that email is already registered";
+                    UseWrongLable("that email is already registered");
 
                 }
             }
             else
             {
-                Wrong.Visibility = Visibility.Visible;
-                WrongLable.FontSize = 10;
-                WrongLable.Content = VC.Verification(PasswordBox.Text) + m;
+               UseWrongLable(VC.Verification(PasswordBox.Text) + m);
             }
         }
 
-        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Transfer(object sender, MouseButtonEventArgs e)
         {
-            if (Register.Visibility == Visibility.Visible) {
+            if (Login.Visibility == Visibility.Visible)
+            {
+                Login.Visibility = Visibility.Hidden;
+                LoginWrong.Visibility = Visibility.Hidden;
+                Register.Visibility = Visibility.Visible;
+
+            }
+            else if (Register.Visibility == Visibility.Visible)
+            {
                 Register.Visibility = Visibility.Hidden;
+                Wrong.Visibility = Visibility.Hidden;
                 Login.Visibility = Visibility.Visible;
             }
-            else {
-                Register.Visibility = Visibility.Visible;
-                Login.Visibility = Visibility.Hidden;
+        }
+
+        private void Toggle(UIElement U)
+        {
+            if (U.Visibility == Visibility.Visible)
+            {
+                U.Visibility = Visibility.Hidden;
             }
+            else if (U.Visibility == Visibility.Hidden)
+            {
+                U.Visibility = Visibility.Visible;
+            }
+
         }
     }
 }

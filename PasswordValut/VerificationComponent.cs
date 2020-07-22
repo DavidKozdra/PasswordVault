@@ -5,6 +5,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PasswordValut
 {
@@ -16,9 +17,19 @@ namespace PasswordValut
         {
 
         }
+        public List<string> Report(ListView IT) {
+            List<string> R = new List<string>();
+            for(int i =0; i < IT.Items.Count; i++)
+            {
+                int space = IT.Items[i].ToString().IndexOf(" ");
+                R.Add(Verification(IT.Items[i].ToString().Substring(space + 1)));
+            }
+            return R;
+        }
+
 
         public bool IsEmail(string E) { //check if this is an email
-            if (E.Contains(".") && E.Contains("@")) {
+            if (E.Contains(".") && E.Contains("@") && E != string.Empty) {
                 return true;
             }
 
@@ -90,6 +101,9 @@ namespace PasswordValut
         /// <param name="pass"> string of possible passwords </param>
         /// <returns> each requirment adds to a string message that then is displayed with all the needs of the password as well as requiremnts </returns>
         public string Verification(string pass) {
+            if (pass.Length <= 0) {
+                return "Password Empty";
+            }
             string Message = "Password";
             string password = pass;
             List<char> tempstr = new List<char>(); //all unique charictars

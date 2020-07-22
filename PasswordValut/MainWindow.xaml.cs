@@ -20,6 +20,7 @@ namespace PasswordValut
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +28,8 @@ namespace PasswordValut
             GenerationComponent GC = new GenerationComponent();
             Utilitys U = new Utilitys();
             PasswordGen.Text = GC.GeneratedPassword(U.RNG(10, 13));
+
+            NameLable.Content = "Name Pending";
             /*
             if (!File.Exists(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\" + email + "PasswordList.txt"))
             {
@@ -49,7 +52,7 @@ namespace PasswordValut
             */
         }
 
-        private void Control_Click(object sender, RoutedEventArgs e)
+        private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (Bar.Text != String.Empty && Bar.Text.Contains(" ")) // && verified with a space and good password
             {
@@ -65,18 +68,57 @@ namespace PasswordValut
             }
         }
 
-        private void Gen_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            GenerationComponent GC = new GenerationComponent();
-            Utilitys U = new Utilitys();
-            PasswordGen.Text = GC.GeneratedPassword(U.RNG(10,13));
-            Console.WriteLine(PasswordGen.Text);
 
-        }
 
         private void use_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            GenerationComponent GC = new GenerationComponent();
+            VerificationComponent VC = new VerificationComponent();
+            string newpass = GC.GeneratedPassword(GC.U.RNG(10, 13));
+            if (VC.Verification(newpass) == "Valid")
+            {
+                PasswordGen.Text = newpass;
+            }
+            else
+            {
+                PasswordGen.Text = GC.GeneratedPassword(GC.U.RNG(10, 13));
+            }
+            Console.WriteLine(PasswordGen.Text);
+        }
+
+        private void Report_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            VerificationComponent VC = new VerificationComponent();
+            List<string> report = VC.Report(Viewer);
+            string temp = "";
+            for (int i = 0; i < report.Count; i++)
+            {
+                temp += " \n " +(i+1).ToString()+"  "+ Viewer.Items[i] +"  "+report[i]  +"\n";
+            }
+            Report.Text = temp;
+        }
+
+        private void Controller_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) {
+                if (Controller.Items[Controller.SelectedIndex] == Controller.Items[0] ) {
+                    Add_Click(sender, e);
+                }
+                if (Controller.Items[Controller.SelectedIndex] == Controller.Items[1])
+                {
+                    Report_MouseDown(sender,null);
+                }
+                if (Controller.Items[Controller.SelectedIndex] == Controller.Items[2])
+                {
+                    Refresh_Click(sender,e);
+                }
+            }
         }
     }
 
