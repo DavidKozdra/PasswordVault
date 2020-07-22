@@ -18,7 +18,7 @@
     </Window.Resources>
     <Grid Margin="10" >
 
-        <TabControl VerticalAlignment="Top" Height="337" x:Name="Controller" KeyDown="Controller_KeyDown" >
+        <TabControl VerticalAlignment="Top" Height="auto" Width="auto" x:Name="Controller" KeyDown="Controller_KeyDown" >
             <TabItem Header="Passwords">
                 <Grid>
                     <StackPanel Orientation="Horizontal" Margin="4">
@@ -34,7 +34,7 @@
             </TabItem>
             <TabItem Header="Password Health Report">
                 <StackPanel>
-                    <ScrollViewer>
+                    <ScrollViewer Height="251">
                         <TextBlock x:Name="Report" Text="Click to get report"  MouseDown="Report_MouseDown" >
                         </TextBlock>
                     </ScrollViewer>
