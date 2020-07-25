@@ -17,6 +17,7 @@ namespace PasswordValut
 {
     /// <summary>
     /// Interaction logic for Login.xaml
+    /// This code is no longer valid can not delete due to file error fix later
     /// </summary>
     public partial class Login : Page
     {
@@ -59,8 +60,8 @@ namespace PasswordValut
                 {
                     parentWindow.Close();
                 }
-                MainWindow Main = new MainWindow();
-                Main.ShowDialog();
+                //MainWindow Main = new MainWindow();
+               // Main.ShowDialog();
 
             }
             else

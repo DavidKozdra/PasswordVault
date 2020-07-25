@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,14 +24,24 @@ namespace PasswordValut
     {
         int wrongattemps = 0;
         string randomcode;
-        User EmptyUser;
+        User EmptyUser = new User("", "");
+
+        private NpgsqlConnection Conn;
+        string constring = String.Format("Server={0};Port={1};" +
+            "User Id={2};Password={3};Database={4};", "localhost", "5433", "postgres", "142862", "PassVault");
+        private NpgsqlCommand cmd;
+        private string sql = null;
+
         public LoginSystem()
         {
             InitializeComponent();
+
+            Conn = new NpgsqlConnection();
             DataObject.AddPastingHandler(PasswordBox, this.OnCancelCommand);
         }
 
-        private List<string> FileToList( System.IO.StreamReader F) {
+        private List<string> FileToList(System.IO.StreamReader F)
+        {
             List<string> S = new List<string>();
             string temp = "";
             while ((temp = F.ReadLine()) != null)
@@ -42,42 +54,46 @@ namespace PasswordValut
 
         private void Signin_Click(object sender, RoutedEventArgs e)
         {
-            string line;
-            List<string> Users = new List<string>();
-            List<string> Passwords = new List<string>();
-            System.IO.StreamReader users =
-       new System.IO.StreamReader(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\UserList.txt");
-            System.IO.StreamReader passwords =
-    new System.IO.StreamReader(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\PasswordList.txt");
 
-            while ((line = users.ReadLine()) != null)
+            int result = 0;
+            try
             {
-                Users.Add(line);
-                Console.WriteLine(line);
+                Conn.ConnectionString = constring;
+                Conn.Open();
+
+                sql = @"select * from u_login(:_useremail,:_password)";
+                cmd = new NpgsqlCommand(sql, Conn);
+                cmd.Parameters.AddWithValue("_useremail", LoginEmailBox.Text);
+                cmd.Parameters.AddWithValue("_password", LoginPasswordBox.Password);
+                result = (int)cmd.ExecuteScalar();
             }
-            while ((line = passwords.ReadLine()) != null)
+            catch
             {
-                Passwords.Add(line);
-                Console.WriteLine(line);
+                UseWrongLable("Some kind of data base issue has occured");
             }
-            Console.WriteLine(Users.IndexOf(EmailBox.Text));
-            if (Users.Contains(LoginEmailBox.Text) && Passwords[Users.IndexOf(LoginEmailBox.Text)] == LoginPasswordBox.Password)
+            if (result == 1)
             {
-                    users.Close();
-                    passwords.Close();
-                    Console.WriteLine("Correct");
-                    MainWindow Main = new MainWindow();
-                    Main.Show();
-                    this.Close();
-                
-              
+                // empty user name is in SQL
+                EmptyUser.Email = LoginEmailBox.Text;
+                MainWindow Main = new MainWindow(EmptyUser);
+                Main.Show();
+                this.Close();
             }
             else
             {
+                try
+                {
+                    Conn.Close();
+                }
+                catch
+                {
+
+                }
                 wrongattemps++;
                 LoginPasswordBox.Password = string.Empty;
                 UseWrongLable("Wrong info " + wrongattemps.ToString());
-                if (wrongattemps == 3) {
+                if (wrongattemps == 3)
+                {
                     UseWrongLable("One more wrong attempt will close the app \n and notify the user");
                 }
                 if (wrongattemps > 3)
@@ -111,22 +127,9 @@ namespace PasswordValut
 
         private void UseWrongLable(string message)
         {
-            if (Login.Visibility == Visibility.Visible)
-            {
-                Console.WriteLine("Login " + message);
-                LoginWrong.Visibility = Visibility.Visible;
-                LoginWrongLable.Content = message;
-                Console.WriteLine(LoginWrongLable.Content);
-            }
-            else if (Register.Visibility == Visibility.Visible)
-            {
-
-                Wrong.Visibility = Visibility.Visible;
-                WrongLable.Content = message;
-            } else if (Login.Visibility == Visibility.Hidden && Register.Visibility == Visibility.Hidden ) {
-                CodeWrong.Visibility = Visibility.Visible;
-                CodeWrongLable.Content = message;
-            }
+            Wrong.Visibility = Visibility.Visible;
+            WrongLable.Visibility = Visibility.Visible;
+            WrongLable.Content = message;
         }
 
 
@@ -145,11 +148,11 @@ namespace PasswordValut
                 }
                 else if (Register.Visibility == Visibility.Hidden && Login.Visibility == Visibility.Hidden)
                 {
-                    Submit_Click(sender,e);
+                    Submit_Click(sender, e);
                 }
             }
         }
-
+        // no code in email yet
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             VerificationComponent VC = new VerificationComponent();
@@ -158,37 +161,43 @@ namespace PasswordValut
             {
                 m = " \n Email in bad format";
             }
-            if (VC.Verification(PasswordBox.Text) == "Valid" && m == "")
+            if (VC.Verification(PasswordBox.Text).Contains("Valid") && m == "")
             {
-
-                System.IO.StreamReader users2 =
-                    new System.IO.StreamReader(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\UserList.txt");
-                string line = "";
-                List<string> Users = new List<string>();
-                while ((line = users2.ReadLine()) != null)
+                int result = 0;
+                try
                 {
-                    Users.Add(line);
-                    Console.WriteLine(line);
+                    Conn.ConnectionString = constring;
+                    Conn.Open();
+                    sql = @"select * from user_table ";
+                    cmd = new NpgsqlCommand(sql, Conn);
+                    Console.WriteLine(cmd.ExecuteScalar().ToString());
                 }
-                users2.Close();
-                if (!Users.Contains(EmailBox.Text))
+                catch
                 {
-                    EmptyUser = new User(Namebox.Text,EmailBox.Text);
+                    UseWrongLable("database error");
+                    Console.WriteLine("database error");
+                }
+                if (!cmd.ExecuteScalar().ToString().Contains(EmailBox.Text))
+                {
+                    Conn.Close();
+                    EmptyUser = new User(Namebox.Text, EmailBox.Text);
                     GenerationComponent GC = new GenerationComponent();
                     randomcode = GC.GeneratedPassword(15);
                     EmailSystem emailSystem = new EmailSystem(EmptyUser, randomcode);
                     emailSystem.Email();
                     Register.Visibility = Visibility.Hidden;
                     CodeVerification.Visibility = Visibility.Visible;
+                    Wrong.Visibility = Visibility.Hidden;
                 }
                 else
                 {
+                    Conn.Close();
                     UseWrongLable("that email is already registered");
                 }
             }
             else
             {
-               UseWrongLable(VC.Verification(PasswordBox.Text) + m);
+                UseWrongLable(VC.Verification(PasswordBox.Text) + m);
             }
         }
 
@@ -196,17 +205,23 @@ namespace PasswordValut
         {
             if (Login.Visibility == Visibility.Visible)
             {
-                Login.Visibility = Visibility.Hidden;
-                LoginWrong.Visibility = Visibility.Hidden;
+                Wrong.Visibility = Visibility.Hidden;
                 Register.Visibility = Visibility.Visible;
-
+                Login.Visibility = Visibility.Hidden;
             }
             else if (Register.Visibility == Visibility.Visible)
             {
                 Register.Visibility = Visibility.Hidden;
                 Wrong.Visibility = Visibility.Hidden;
                 Login.Visibility = Visibility.Visible;
-            } 
+            }
+            else
+            {
+                Wrong.Visibility = Visibility.Hidden;
+                Register.Visibility = Visibility.Visible;
+                Login.Visibility = Visibility.Hidden;
+                CodeVerification.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Toggle(UIElement U)
@@ -225,7 +240,7 @@ namespace PasswordValut
         {
 
             e.CancelCommand();
-
+            Console.WriteLine("Canceled", e);
         }
 
         private void LoginPasswordBox_Pasting(object sender, DataObjectPastingEventArgs e)
@@ -234,30 +249,41 @@ namespace PasswordValut
             OnCancelCommand(sender, e);
         }
 
+        //code from email is entered
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             int wrongs = 0;
             if (CodeBox.Text == randomcode)
             {
-              
-                    System.IO.StreamWriter users =
-new System.IO.StreamWriter(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\UserList.txt", true);
-                    System.IO.StreamWriter passwords =
-                            new System.IO.StreamWriter(@"C:\Users\david\source\repos\PasswordValut\PasswordValut\PasswordList.txt", true);
-
-                    users.Write(EmailBox.Text + "\n");
-                    passwords.Write(PasswordBox.Text + "\n");
-                    users.Close();
-                    passwords.Close();
-                    System.Threading.Thread.Sleep(2000);
-                    MainWindow Main = new MainWindow();
+                int result = 0;
+                try
+                {
+                    Conn.ConnectionString = constring;
+                    Conn.Open();
+                    sql = string.Format(@"insert into user_table VALUES({0},{1},{2},{3})", EmailBox.Text, Namebox.Text, PasswordBox.Text, DateTime.Now.ToString());
+                    cmd = new NpgsqlCommand(sql, Conn);
+                    NpgsqlCommand iQuery = new NpgsqlCommand("insert into user_table values('" + EmailBox.Text + "','" + Namebox.Text + "','" + PasswordBox.Text + "','" + DateTime.Now.ToString() + "')", Conn);
+                    iQuery.ExecuteNonQuery();
+                    //System.Threading.Thread.Sleep(2000);
+                    EmptyUser.Email = EmailBox.Text;
+                    MainWindow Main = new MainWindow(EmptyUser);
+                    Conn.Close();
                     Main.Show();
                     this.Close();
-                
+                }
+                catch
+                {
+
+                }
+
+
+
             }
-            else {
+            else
+            {
                 wrongs++;
-                if (wrongs ==3)
+                Conn.Close();
+                if (wrongs == 3)
                 {
                     UseWrongLable("One more wrong attept will \n shut down the app");
                     this.Close();

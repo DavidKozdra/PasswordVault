@@ -64,8 +64,8 @@ namespace PasswordValut
                     {
                         parentWindow.Close();
                     }
-                    MainWindow Main = new MainWindow();
-                    Main.ShowDialog();
+                   // MainWindow Main = new MainWindow();
+                   // Main.ShowDialog();
                 }
                 else {
                     Wrong.Visibility = Visibility.Visible;

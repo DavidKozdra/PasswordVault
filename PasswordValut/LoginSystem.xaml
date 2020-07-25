@@ -8,6 +8,7 @@
         Title="Login" Height="450" Width="320" Background="#042142" KeyDown="Enter_KeyDown">
 
     <Grid>
+        <!-- Login controls-->
         <Grid  x:Name="Login" Visibility="Visible" Margin="10">
             <Border BorderBrush="Black" Background="#2e3137" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Center" CornerRadius="25" Height="358" Margin="17,0">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" >
@@ -28,10 +29,9 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Border x:Name="LoginWrong" CornerRadius="5" BorderThickness="1" Background="#cc1427" VerticalAlignment="Bottom" Width="230"  Height="57" Visibility="Hidden" Margin="41,0" >
-            <Label x:Name="LoginWrongLable" FontSize="10" Content="XXXX" Foreground="AntiqueWhite" HorizontalAlignment="Center" Margin="-1,-1,-1,0" Width="230"  />
-        </Border>
 
+
+        <!-- Register Controls-->
         <Grid Margin="10" x:Name="Register" Visibility="Hidden">
             <Border BorderBrush="Black" Background="#2e3137" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Center" CornerRadius="25" Height="358" Margin="17,0">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" >
@@ -66,7 +66,7 @@
         </Border>
 
 
-
+<!--Code Verification UI for new account-->
         <Grid  x:Name="CodeVerification" Visibility="Hidden" Margin="10">
             <Border BorderBrush="Black" Background="#2e3137" BorderThickness="1" VerticalAlignment="Top" HorizontalAlignment="Center" CornerRadius="25" Height="358" Margin="17,0">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" >
@@ -79,9 +79,7 @@
                     <TextBlock Text="Register" Foreground="#5199f0"  HorizontalAlignment="Center" Margin="-20" MouseDown="Transfer" />
                 </StackPanel>
             </Border>
-            <Border x:Name="CodeWrong"  CornerRadius="5" BorderThickness="1" Background="#cc1427" VerticalAlignment="Bottom" Width="230" Height="30" Visibility="Hidden" >
-                <Label x:Name="CodeWrongLable"  Content="XXXX" Foreground="AntiqueWhite" HorizontalAlignment="Center" FontSize="10"  />
-            </Border>
+
         </Grid>
     </Grid>
 
