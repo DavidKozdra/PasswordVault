@@ -53,8 +53,10 @@
             <TabItem Header="Passwords">
                 <Grid>
                     <StackPanel Orientation="Horizontal" Margin="4,0,0,209">
+
                         <Label FontSize="10" Content="Search :"  Padding="10" Width="69"/>
                         <TextBox x:Name="Bar" Width="293"  FontSize="18" Margin="0,0,0,10"/>
+                        <Button x:Name="New" Width="92" Content="New" Click="New_Click" Margin="0,0,0,10"  />
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,57,0,0" >
                         <ListView x:Name="Viewer" BorderThickness="2"  BorderBrush="Black" >
@@ -68,17 +70,16 @@
                         </ListView>
                     </ScrollViewer>
                     <StackPanel Margin="0,219,0,10" VerticalAlignment="Bottom">
-                        <Button x:Name="New" Width="112" Content="New" Click="New_Click"  />
+
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Password Health Report">
                 <StackPanel>
-                    <Button  Content="New  Report"  Click="Report_MouseDown" Margin="284,0,201,0" Height="16"/>
+                    <Button  Content="New  Report"  Click="Report_MouseDown" Margin="284,0,194,0" Height="26"/>
                     <ScrollViewer Height="251">
 
-                        <TextBox x:Name="Report" Style="{StaticResource ResourceKey=SelectableTextBlockLikeStyle}" Background="Transparent" Text="Report ">
-                        </TextBox>
+                        <TextBox x:Name="Report" Style="{StaticResource ResourceKey=SelectableTextBlockLikeStyle}" Background="Transparent" Text="Report "/>
                     </ScrollViewer>
 
                 </StackPanel>
@@ -91,7 +92,7 @@
                     <TextBox Text="XXX" x:Name="PasswordGen"  Style="{StaticResource ResourceKey=SelectableTextBlockLikeStyle}"  FontSize="30" Margin="20" Foreground="Black">
                     </TextBox>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                        <Button x:Name="Refresh" Click="Refresh_Click" Width="118" Content="Refresh"  Background="#545d5a" Foreground="White" FontSize="18"/>
+                        <Button x:Name="Refresh" Click="Refresh_Click" Width="118" Content="Refresh"  Background="#545d5a" Foreground="White" FontSize="18" Height="30"/>
                         <Button x:Name="use" Click="use_Click" Margin="40" Width="118" Content="Use"  Background="#545d5a" Foreground="White" FontSize="18"/>
 
                     </StackPanel>
@@ -133,9 +134,10 @@
             </Grid>
         </Border>
         <!-- This is Editing Popup-->
-        <Border CornerRadius="20" Margin="0,206,0,0" Background="#2e3137" Visibility="Hidden" x:Name="EditPopup" MaxHeight="300">
+        <Border CornerRadius="20" Margin="0,206,0,0" Background="#2e3137" Visibility="Visible" x:Name="EditPopup" MaxHeight="300">
             <Grid>
                 <Button Content="Save" Margin="442,23,26,27" MaxHeight="100" MaxWidth="200" Name="Savebtn" Click="Savebtn_Click"/>
+                <Button Content="Delete" Margin="350,23,135,27" MaxHeight="100" MaxWidth="200" Name="Deletebtn" Click="Deletebtn_Click"/>
                 <StackPanel Orientation="Vertical" >
                     <StackPanel Orientation="Horizontal" Margin="0,10">
                         <Label Foreground="AntiqueWhite" Margin="0,0,8,0" Content="Change Website: " />

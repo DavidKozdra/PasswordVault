@@ -1,6 +1,8 @@
 ﻿using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,66 +26,96 @@ namespace PasswordValut
         User CurrentUser;
 
         private NpgsqlConnection Conn = new NpgsqlConnection();
-        string constring = String.Format("Server={0};Port={1};" +
-            "User Id={2};Password={3};Database={4};", "localhost", "5433", "postgres", "142862", "PassVault");
+
         private NpgsqlCommand cmd;
         private string sql = null;
+        private string precomname, prepass = "";
 
         public MainWindow(User user)
         {
+
             CurrentUser = user;
+            Console.WriteLine(CurrentUser.Email);
             InitializeComponent();
             Console.WriteLine("We're  in");
             GenerationComponent GC = new GenerationComponent();
             Utilitys U = new Utilitys();
             PasswordGen.Text = GC.GeneratedPassword(U.RNG(10, 13));
-
+            NpgsqlConnection Conn = new NpgsqlConnection();
             NameLable.Content = CurrentUser.Name + "\n" + CurrentUser.Email;
-
+            Conn.ConnectionString = LoginSystem.constring;
+            Conn.Open();
             try
             {
-                Conn.ConnectionString = constring;
-                Conn.Open();
-                sql = string.Format(@"select * from passvault");
-                cmd = new NpgsqlCommand(sql, Conn);
-                NpgsqlCommand iQuery = new NpgsqlCommand("select * from passvault");
-                iQuery.ExecuteNonQuery();
-            }
-            catch
+                NpgsqlCommand command = new NpgsqlCommand(string.Format("SELECT companyname,passoword FROM passvault WHERE useremail=\'{0}\';", CurrentUser.Email), Conn);
+            Console.WriteLine();
+            NpgsqlDataAdapter da = new NpgsqlDataAdapter(command);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            List<string> websites = new List<string>();
+            List<string> passwords = new List<string>();
+            foreach (DataRow row in dt.Rows)
             {
-                Console.WriteLine("assumed passvault empty");
-                usewronglable("database error");
+                websites.Add(row.Field<string>(0));
+                passwords.Add(row.Field<string>(1));
+            }
+
+            for (int i = 0; i < passwords.Count; i++)
+            {
+                Console.WriteLine("{0} {1}", websites[i],passwords[i]);
+                Viewer.Items.Add(websites[i]+" "+passwords[i]);
+            }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("assumed passvault empty" + e.Message);
+                usewronglable("WELCOME :)");
             }
             Conn.Close();
         }
-
+    
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if (WebsiteNameText.Text != String.Empty && PasswordText.Text != String.Empty) // && verified with a space and good password
             {
                 Viewer.Items.Add(WebsiteNameText.Text + " " + PasswordText.Text);
+                NpgsqlConnection Conn = new NpgsqlConnection();
+                Conn.ConnectionString = LoginSystem.constring;
+                Conn.Open();
                 try
                 {
-                    Conn.ConnectionString = constring;
-                    Conn.Open();
-                    WebsiteNameText.Text = WebsiteNameText.Text.Remove(' ');
-                    PasswordText.Text = PasswordText.Text.Remove(' ');
+                    WebsiteNameText.Text = WebsiteNameText.Text.Replace(" ", string.Empty);
+                    PasswordText.Text = PasswordText.Text.Replace(" ", string.Empty);
+
                     //************** fix this should be based on popup add system
-                    sql = String.Format(@"INSERT INTO passvault VALUES({0},{1},{2},{3})", CurrentUser.Email, WebsiteNameText.Text, PasswordText.Text, DateTime.Now.ToString());
-                    cmd = new NpgsqlCommand(sql, Conn);
+                    NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM passvault;",Conn);
+                    NpgsqlDataReader reader = command.ExecuteReader();
+
+                    int i = 0;
+                    while (reader.Read())
+                    {
+                        i++;
+                    }
+                    reader.Close();
+                    Console.WriteLine("Number of rows " + i);
+                    NpgsqlCommand iQuery = new NpgsqlCommand("INSERT INTO passvault VALUES('" + i + "','" + CurrentUser.Email + "','" + WebsiteNameText.Text + "','" + PasswordText.Text + "','" + DateTime.Now.ToString() + "')", Conn);
+                    iQuery.ExecuteNonQuery();
                     WebsiteNameText.Clear();
                     PasswordText.Clear();
                     AddPopup.Visibility = Visibility.Hidden;
                     Wrong.Visibility = Visibility.Hidden;
 
-                    Conn.Close();
-                    Bar.Clear();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    usewronglable("DatabaseError Sorry :^( ");
+                    Console.WriteLine(ex.StackTrace.ToString() + ex.Message);
+                    usewronglable("Data base error");
                 }
+
             }
             else
             {
@@ -180,10 +212,15 @@ namespace PasswordValut
                 s[0] += s[1];
                 NewWebsite.Text = s[0];
                 NewPassword.Text = s[2];
+                precomname = s[0];
+                prepass = s[2];
             }
-            else {
+            else
+            {
                 NewWebsite.Text = s[0];
                 NewPassword.Text = s[1];
+                precomname = s[0];
+                prepass = s[1];
             }
         }
 
@@ -191,8 +228,32 @@ namespace PasswordValut
         private void Savebtn_Click(object sender, RoutedEventArgs e)
         {
             EditPopup.Visibility = Visibility.Hidden;
+            Conn.ConnectionString = LoginSystem.constring;
+            Conn.Open();
+            NpgsqlCommand iQuery = new NpgsqlCommand(String.Format("UPDATE passvault SET companyname = \'{0}\', passoword = \'{1}\' WHERE companyname =\'{2}\' and passoword=\'{3}\'; ",NewWebsite.Text,NewPassword.Text,precomname,prepass),Conn);
+            iQuery.ExecuteNonQuery();
+            Viewer.Items.Remove(Viewer.SelectedItem);
+            Viewer.Items.Add(NewWebsite.Text + " " + NewPassword.Text);
             NewWebsite.Clear();
             NewPassword.Clear();
+            Conn.Close();
+        }
+
+        private void Deletebtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Viewer.SelectedItem != null)
+            {
+                EditPopup.Visibility = Visibility.Hidden;
+                Viewer.Items.Remove(Viewer.SelectedItem);
+                Conn.ConnectionString = LoginSystem.constring;
+                Conn.Open();
+                NpgsqlCommand iQuery = new NpgsqlCommand(String.Format("Delete from passvault Where companyname = \'{0}\' and passoword = \'{1}\';", NewWebsite.Text, NewPassword.Text), Conn);
+                iQuery.ExecuteNonQuery();
+                Conn.Close();
+            }
+            else {
+                Console.WriteLine("what");
+            }
         }
 
         private void logoutlink_MouseDown(object sender, MouseButtonEventArgs e)

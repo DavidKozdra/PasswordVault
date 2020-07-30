@@ -27,7 +27,7 @@ namespace PasswordValut
         User EmptyUser = new User("", "");
 
         private NpgsqlConnection Conn;
-        string constring = String.Format("Server={0};Port={1};" +
+        public static readonly string constring = String.Format("Server={0};Port={1};" +
             "User Id={2};Password={3};Database={4};", "localhost", "5433", "postgres", "142862", "PassVault");
         private NpgsqlCommand cmd;
         private string sql = null;
@@ -75,6 +75,7 @@ namespace PasswordValut
             {
                 // empty user name is in SQL
                 EmptyUser.Email = LoginEmailBox.Text;
+                Console.WriteLine(LoginEmailBox.Text);
                 MainWindow Main = new MainWindow(EmptyUser);
                 Main.Show();
                 this.Close();
@@ -271,12 +272,11 @@ namespace PasswordValut
                     Main.Show();
                     this.Close();
                 }
-                catch
+                catch(Exception ex)
                 {
-
+                    Console.WriteLine(ex.StackTrace.ToString());
+                    UseWrongLable("Data base error");
                 }
-
-
 
             }
             else
