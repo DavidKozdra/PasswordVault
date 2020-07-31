@@ -18,7 +18,7 @@
 * Allows for page transfer to register
 
 ![Register](ImagesForGit/UI2.jpg)
-*
+
 * page transfers to login if requested
 * when register is accepted a code verification page will be showed
 
