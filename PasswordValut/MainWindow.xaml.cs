@@ -156,10 +156,25 @@ namespace PasswordValut
             VerificationComponent VC = new VerificationComponent();
             List<string> report = VC.Report(Viewer);
             string temp = "";
+            
             for (int i = 0; i < report.Count; i++)
             {
                 temp += " \n " + (i + 1).ToString() + "  " + Viewer.Items[i] + "  " + report[i] + "\n";
             }
+            
+            /*
+            List<string> l = new List<string>();
+            foreach (ListViewItem x in Viewer.Items) {
+                if (!l.Contains(x.Content))
+                {
+                    l.Add(x.Content);
+                }
+                else {
+                    temp += "Duplicate passwords found";
+                }
+            }
+            */
+            
             Report.Text = temp;
         }
 
