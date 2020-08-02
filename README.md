@@ -25,6 +25,11 @@
 ![Correction](ImagesForGIt/UI3.jpg)
 * if the register info is incorrect this message will appear
 
+![Registration](ImagesForGIt/UI4.jpg)
+* once registration is accurate the page asks for a code that was emailed to the address used to register
+
+![Registrationcode](ImagesForGIt/verification.jpg)
+
 ![Password Book](ImagesForGIt/new.jpg)
 * this is the main page of the app
 
