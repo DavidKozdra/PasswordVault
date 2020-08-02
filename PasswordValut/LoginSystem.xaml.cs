@@ -92,7 +92,7 @@ namespace PasswordValut
                 }
                 wrongattemps++;
                 LoginPasswordBox.Password = string.Empty;
-                UseWrongLable("Wrong info " + wrongattemps.ToString());
+                UseWrongLable("Wrong info " + (3-wrongattemps).ToString() + "attempts ");
                 if (wrongattemps == 3)
                 {
                     UseWrongLable("One more wrong attempt will close the app \n and notify the user");
