@@ -12,25 +12,25 @@
 
 ###  Product Presentation
 
-![Login Page](ImagesForGit/UI.jpg)
+![Login Page](ImagesForGIt/UI.jpg)
 
 * The login page verifys items are in the sql server
 * Allows for page transfer to register
 
-![Register](ImagesForGit/UI2.jpg)
+![Register](ImagesForGIt/UI2.jpg)
 
 * page transfers to login if requested
 * when register is accepted a code verification page will be showed
 
-![Correction](ImagesForGit/UI3.jpg)
+![Correction](ImagesForGIt/UI3.jpg)
 * if the register info is incorrect this message will appear
 
-![Password Book](ImagesForGit/new.jpg)
+![Password Book](ImagesForGIt/new.jpg)
 * this is the main page of the app
 
 
-![Adding items](ImagesForGit/new2.jpg)
+![Adding items](ImagesForGIt/new2.jpg)
 * adding a new item the source of the website and password
 
-![Password Health Report](ImagesForGit/report.jpg)
+![Password Health Report](ImagesForGIt/report.jpg)
 * passwords are tested for strength
