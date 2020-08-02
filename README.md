@@ -29,7 +29,7 @@
 * once registration is accurate the page asks for a code that was emailed to the address used to register
 
 ![Registrationcode](ImagesForGIt/verification.jpg)
-email code uses generation of password system
+* email code uses generation of password system
 
 ![Password Book](ImagesForGIt/new.jpg)
 * this is the main page of the app
