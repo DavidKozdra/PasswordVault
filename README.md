@@ -39,3 +39,6 @@
 
 ![Password Health Report](ImagesForGIt/report.jpg)
 * passwords are tested for strength
+
+![Generation](ImagesForGIt/Generate.jpg)
+* Creation of random password refrseh gains new password
