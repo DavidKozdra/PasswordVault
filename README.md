@@ -1,3 +1,5 @@
+This project is currently not hosted and so it will not be testable
+
 
 # Introduction to PassVault
   Passvault is a simple password holder for people who don't trust google or last pass; this system verifies passwords and generates new passwords.
