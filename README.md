@@ -1,8 +1,8 @@
-This project is currently not hosted and so it will not be testable
+ ⚠️ NOTE :This project is currently not hosted and so it will not be testable ⚠️
 
 
-# Introduction to PassVault
-  Passvault is a simple password holder for people who don't trust google or last pass; this system verifies passwords and generates new passwords.
+# PassVault
+  Passvault is a simple password holder for people who don't trust Google or last pass; this system verifies passwords and generates new passwords. WPF C# Desktop application that connects to a Postgres Database. 
 
 ##  Features
 
@@ -16,31 +16,41 @@ This project is currently not hosted and so it will not be testable
 
 ![Login Page](ImagesForGIt/UI.jpg)
 
-* The login page verifies items are in the SQL server
-* Allows for page transfer to register
+ 
+ The login page verifies items are in the SQL server
+ Allows for page transfer to register
 
 ![Register](ImagesForGIt/UI2.jpg)
 
-* page transfers to log in if requested
-* when a register is accepted a code verification page will be shown
+
+ Page transfers to log in if requested
+ 
+ When a register is accepted a code verification page will be shown
 
 ![Correction](ImagesForGIt/UI3.jpg)
-* if the registration info is incorrect, this message will appear
+ 
+ If the registration info is incorrect, this message will appear
 
 ![Registration](ImagesForGIt/UI4.jpg)
-* once registration is accurate the page asks for a code that was emailed to the address used to register
+
+Once registration is accurate the page asks for a code that was emailed to the address used to register
 
 ![Registrationcode](ImagesForGIt/verification.jpg)
-* email code uses generation system to create unique codes
+ 
+ Email code uses generation system to create unique codes
 
 ![Password Book](ImagesForGIt/new.jpg)
-* this is the main page of the app
+
+This is the main page of the app
 
 ![Adding items](ImagesForGIt/new2.jpg)
-* adding a new item the source of the website and password
+ 
+ Adding a new item the source of the website and password
 
 ![Password Health Report](ImagesForGIt/report.jpg)
-* passwords are tested for strength
+
+Passwords are tested for strength
 
 ![Generation](ImagesForGIt/Generate.jpg)
-* Creation of random password refresh gains new password
+ 
+ Creation of random password refresh gains new password
